@@ -49,23 +49,18 @@ namespace FigureApp
 
         public override void RotateFigure(double angle)
         {
-            /*  while (angle > 360) angle -= 360;
-              angle = angle * Math.PI / 180;
+              while (angle > 360) angle -= 360;
+           
               foreach(var p in Points)
               {
-                  p.x = (p.x - Center.x) * Math.Cos(angle);
-                  p.y = (p.y - Center.y) * Math.Sin(angle);
+                  p.x = p.x * Math.Cos(angle) - p.y * Math.Sin(angle);
+                  p.y = p.y * Math.Cos(angle) + p.x * Math.Sin(angle);
               }
-            */
+            
         }
 
         public override void MoveFigure(int moveByX, int moveByY)
         {
-           /* for(int i = 0; i < Points.Count; i++)
-            {
-                Points[i].x += moveByX;
-                Points[i].y += moveByY;
-            }*/
            foreach(var p in Points)
             {
                 p.x += moveByX;
