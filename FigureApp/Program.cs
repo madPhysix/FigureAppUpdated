@@ -16,7 +16,7 @@ namespace FigureApp
             List<Figure> ListOfFigures = new List<Figure>();
             string saver = "";
             int choice;
-
+            StreamWriter xwriter = new StreamWriter("pointsaver.txt", true);
 
 
 
@@ -59,8 +59,15 @@ namespace FigureApp
                                         Point point1 = new Point(Convert.ToInt32(Console.ReadLine()), Convert.ToInt32(Console.ReadLine()));
                                         Point point2 = new Point(Convert.ToInt32(Console.ReadLine()), Convert.ToInt32(Console.ReadLine()));
                                         List<Point> pointsOfCircle = new List<Point> { point1, point2 };
-                                       
+                                        
+                                        
                                         Circle circle = new Circle(pointsOfCircle);
+                                        xwriter.Write("circle ");
+                                        foreach(var p in pointsOfCircle)
+                                        {
+                                            xwriter.Write($"{p.x} {p.y} ");
+                                        }
+                                        xwriter.WriteLine();
                                         circle.FindCenter();
                                         circle.FindArea();
                                         circle.FindPerimeter();
@@ -81,6 +88,13 @@ namespace FigureApp
                                         List<Point> pointsOfRectangle = new List<Point> { point11, point12, point13, point14 };
                                       
                                         Rectangle rectangle = new Rectangle(pointsOfRectangle);
+
+                                        xwriter.Write("rectangle ");
+                                        foreach (var p in pointsOfRectangle)
+                                        {
+                                            xwriter.Write($"{p.x} {p.y} ");
+                                        }
+                                        xwriter.WriteLine();
                                         rectangle.FindCenter();
                                         rectangle.FindArea();
                                         rectangle.FindPerimeter();
@@ -97,6 +111,12 @@ namespace FigureApp
                                         List<Point> pointsOfTriangle = new List<Point> { point21, point22, point23 };
                                        
                                         Triangle triangle = new Triangle(pointsOfTriangle);
+                                        xwriter.Write("triangle ");
+                                        foreach (var p in pointsOfTriangle)
+                                        {
+                                            xwriter.Write($"{p.x} {p.y} ");
+                                        }
+                                        xwriter.WriteLine();
                                         triangle.DefineSides(pointsOfTriangle);
                                         triangle.FindCenter();
                                         triangle.FindArea();
@@ -165,6 +185,7 @@ namespace FigureApp
                             if(choice == 0)
                                 {
                                     Console.WriteLine("Ended!");
+                                    xwriter.Close();
                                     Environment.Exit(0);
                                     return;
                                 }
