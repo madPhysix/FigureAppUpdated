@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,7 +10,7 @@ namespace FigureApp
     internal class Triangle: Figure
     {
         double sideAB, sideBC, sideCA;
-  
+        
 
         public Triangle(List<Point> points):base(points)
         {
@@ -32,14 +33,21 @@ namespace FigureApp
 
         public override void FindArea()
         {
+            FindPerimeter();
             double peri = Perimeter / 2;
             Area = Math.Sqrt(peri * (peri - sideAB) * (peri - sideBC) * (peri - sideCA));
         }
 
         public override void FindCenter()
         {
-            Center.x = (Points[0].x + Points[1].x + Points[2].x)/3;
-            Center.y = (Points[0].y + Points[1].y + Points[2].y)/3;
+            double sumX = 0, sumY = 0;
+            foreach (var p in Points)
+            {
+                sumX += p.x;
+                sumY += p.y;
+            }
+            this.Center = new Point(sumX / 3, sumY / 3);
+            
         }
 
         public override void FindPerimeter()

@@ -16,6 +16,10 @@ namespace FigureApp
             List<Figure> ListOfFigures = new List<Figure>();
             string saver = "";
             int choice;
+
+
+
+
             while (true)
             {
                 Console.WriteLine("\n1)show all figures\n2)create a figure\n3)change figure\n4)save to file\n0)exit");
@@ -37,6 +41,7 @@ namespace FigureApp
                     }
                 case 2:
                     {
+                            
                             Console.WriteLine("Please, choose the figure you want to create:\n" +
                                 "1)Circle\n" +
                                 "2)Rectangle(square)\n" +
@@ -47,20 +52,23 @@ namespace FigureApp
                             {
                                 switch (underChoice)
                                 {
+                                    
                                     case 1:
                                         Console.WriteLine("Please, enter the coordinates of the center, and any other point of your circle: ");
 
                                         Point point1 = new Point(Convert.ToInt32(Console.ReadLine()), Convert.ToInt32(Console.ReadLine()));
                                         Point point2 = new Point(Convert.ToInt32(Console.ReadLine()), Convert.ToInt32(Console.ReadLine()));
                                         List<Point> pointsOfCircle = new List<Point> { point1, point2 };
-
+                                       
                                         Circle circle = new Circle(pointsOfCircle);
                                         circle.FindCenter();
                                         circle.FindArea();
                                         circle.FindPerimeter();
-                                        saver += $"The area of this circle is {circle.Area} and the perimeter is {circle.Perimeter}\n";
+                                        saver += $"The area of this circle is {circle.Area} and the perimeter is {circle.Perimeter} \n";
                                         flag = true;
                                         ListOfFigures.Add(circle);
+                                        
+                                        
                                         break;
 
                                     case 2:
@@ -71,11 +79,12 @@ namespace FigureApp
                                         Point point13 = new Point(Convert.ToInt32(Console.ReadLine()), Convert.ToInt32(Console.ReadLine()));
                                         Point point14 = new Point(Convert.ToInt32(Console.ReadLine()), Convert.ToInt32(Console.ReadLine()));
                                         List<Point> pointsOfRectangle = new List<Point> { point11, point12, point13, point14 };
+                                      
                                         Rectangle rectangle = new Rectangle(pointsOfRectangle);
                                         rectangle.FindCenter();
                                         rectangle.FindArea();
                                         rectangle.FindPerimeter();
-                                        saver = saver + ("The area of rectangle is: "+ rectangle.Area + " and Perimeter of rectangle is: " + rectangle.Perimeter + "\n");
+                                        saver += $"The area of rectangle is: {rectangle.Area} and Perimeter of rectangle is: {rectangle.Perimeter}\n";
                                         flag = true;
                                         ListOfFigures.Add(rectangle);
                                         break;
@@ -86,12 +95,13 @@ namespace FigureApp
                                         Point point22 = new Point(Convert.ToInt32(Console.ReadLine()), Convert.ToInt32(Console.ReadLine()));
                                         Point point23 = new Point(Convert.ToInt32(Console.ReadLine()), Convert.ToInt32(Console.ReadLine()));
                                         List<Point> pointsOfTriangle = new List<Point> { point21, point22, point23 };
-
+                                       
                                         Triangle triangle = new Triangle(pointsOfTriangle);
+                                        triangle.DefineSides(pointsOfTriangle);
                                         triangle.FindCenter();
                                         triangle.FindArea();
                                         triangle.FindPerimeter();
-                                        saver += "The area of triangle is: "+ triangle.Area + " and Perimeter of triangle is: " + triangle.Perimeter + "\n"; 
+                                        saver += $"The area of triangle is: {triangle.Area} and Perimeter of triangle is: {triangle.Perimeter}\n"; 
                                         ListOfFigures.Add(triangle);
                                         flag = true;
                                         break;
@@ -106,7 +116,7 @@ namespace FigureApp
                     {
                             Console.WriteLine("Choose what you want to change: \n 1)Move the figure \n 2)Rotate the figure \n 3)Scale the figure \n 4) Delete the Figure");
                             int whatToDo = Convert.ToInt32(Console.ReadLine());
-                            Console.WriteLine("Choose the index of element you want to change(begins from zero): 1");
+                            Console.WriteLine("Choose the index of element you want to change(begins from zero):");
                             int index = Convert.ToInt32(Console.ReadLine());
                             switch (whatToDo)
                             {
@@ -126,9 +136,12 @@ namespace FigureApp
                                     Console.WriteLine("I'm deleting this figure");
                                     ListOfFigures.RemoveAt(index);
                                     saver = "";
+                                    StreamWriter deleteAll = new StreamWriter("figure.txt",false);
+                                    deleteAll.Write("");
+                                    deleteAll.Close();
                                     foreach(Figure p in ListOfFigures)
                                     {
-                                        saver = $"The area of {p.ToString()} is {p.Area} and Perimeter of {p.ToString()} is {p.Perimeter}\n";
+                                        saver = $"The area of {p.ToString()} is {p.Area} and Perimeter of {p.ToString()} is {p.Perimeter}";
                                     }
                                     break;
                             }
@@ -139,10 +152,11 @@ namespace FigureApp
                 case 4:
                     {
                             StreamWriter writer = new StreamWriter("figure.txt",true);
-                            writer.WriteLine(saver);
+                            writer.Write(saver);
                             saver = "";
                             writer.Close();
-                        break;
+
+                            break;
                     }
                 default:
                     {
