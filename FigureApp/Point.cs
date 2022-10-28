@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace FigureApp
 {
-    internal class Point
+    internal class Point 
     {
+
         public double x;
         public double y;
         public Point(double x, double y)

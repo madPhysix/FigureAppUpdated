@@ -10,13 +10,12 @@ namespace FigureApp
     internal class Circle : Figure
     {
        public double radius;
-
+       public string name = "circle";
         
         
         public Circle(List<Point> points) : base(points)
         {
            
-
             radius = Math.Sqrt(((points[0].x - points[1].x) * (points[0].x - points[1].x)) + 
                 ((points[0].y - points[1].y) * (points[0].y - points[1].y)));
                 

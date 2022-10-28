@@ -6,10 +6,13 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FigureApp
+namespace FigureApp 
 {
+    
     internal abstract class Figure
     {
+        
+        public string name { get; private set; }
         public double Area { get; protected set; }
         public double Perimeter { get; protected set; }
         public List<Point> Points { get; protected set; }
@@ -22,6 +25,7 @@ namespace FigureApp
             this.FindArea();
             this.FindPerimeter();
             this.FindCenter();
+            this.name = name;
         }
 
         public abstract void FindCenter();

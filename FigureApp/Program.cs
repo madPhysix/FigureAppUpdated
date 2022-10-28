@@ -20,9 +20,13 @@ namespace FigureApp
 
 
 
+
+
+
+
             while (true)
             {
-                Console.WriteLine("\n1)show all figures\n2)create a figure\n3)change figure\n4)save to file\n0)exit");
+                Console.WriteLine("\n1)show all figures\n2)create a figure\n3)change figure\n4)save to file\n5)read from file\n0)exit");
                 bool parsed = int.TryParse(Console.ReadLine(), out choice);
                 switch (choice)
             {
@@ -62,6 +66,7 @@ namespace FigureApp
                                         
                                         
                                         Circle circle = new Circle(pointsOfCircle);
+                                        
                                         xwriter.Write("circle ");
                                         foreach(var p in pointsOfCircle)
                                         {
@@ -88,7 +93,7 @@ namespace FigureApp
                                         List<Point> pointsOfRectangle = new List<Point> { point11, point12, point13, point14 };
                                       
                                         Rectangle rectangle = new Rectangle(pointsOfRectangle);
-
+                                        
                                         xwriter.Write("rectangle ");
                                         foreach (var p in pointsOfRectangle)
                                         {
@@ -161,7 +166,7 @@ namespace FigureApp
                                     deleteAll.Close();
                                     foreach(Figure p in ListOfFigures)
                                     {
-                                        saver = $"The area of {p.ToString()} is {p.Area} and Perimeter of {p.ToString()} is {p.Perimeter}";
+                                        saver = $"The area of {p.name} is {p.Area} and Perimeter of {p} is {p.Perimeter}";
                                     }
                                     break;
                             }
@@ -178,6 +183,63 @@ namespace FigureApp
 
                             break;
                     }
+                    case 5:
+                        {
+                            xwriter.Close();
+                            StreamReader fileReader = new StreamReader("pointsaver.txt");
+                            string readed = "";
+
+                            while (readed != null)
+                            {
+                                readed = fileReader.ReadLine();
+                               
+                                if (readed != null)
+                                {
+                                    var splitter = readed.Split(' ');
+                                    switch (splitter[0])
+                                    {
+                                        case "circle":
+                                            {
+                                                int i = 1;
+                                                List<Point> pointsOfCircle = new List<Point>();
+
+                                                while (i < splitter.Length - 1)
+                                                {
+                                                    Point readedPoints = new Point(Convert.ToDouble(splitter[i]), Convert.ToDouble(splitter[i + 1]));
+                                                    pointsOfCircle.Add(readedPoints);
+                                                    i += 2;
+                                                }
+                                                Circle circle = new Circle(pointsOfCircle);
+                                                ListOfFigures.Add(circle);
+                                                circle.FindArea();
+                                                circle.FindCenter();
+                                                circle.FindPerimeter();
+                                                break;
+                                            }
+                                        case "rectangle":
+                                            {
+                                                int i = 1;
+                                                List<Point> pointsOfRectangle = new List<Point>();
+
+                                                while (i < splitter.Length - 1)
+                                                {
+                                                    Point readedPoints = new Point(Convert.ToDouble(splitter[i]), Convert.ToDouble(splitter[i + 1]));
+                                                    pointsOfRectangle.Add(readedPoints);
+                                                    i += 2;
+                                                }
+                                                Rectangle rectangle = new Rectangle(pointsOfRectangle);
+                                                ListOfFigures.Add(rectangle);
+                                                rectangle.FindArea();
+                                                rectangle.FindCenter();
+                                                rectangle.FindPerimeter();
+                                                break;
+                                            }
+                                    }
+                                }
+                                }
+                            fileReader.Close();
+                            break;
+                        }
                 default:
                     {
                         if(parsed)
