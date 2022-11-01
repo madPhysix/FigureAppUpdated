@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
@@ -14,15 +15,12 @@ namespace FigureApp
         static void Main(string[] args)
         {
             List<Figure> ListOfFigures = new List<Figure>();
-            string saver = "";
             int choice;
             
 
 
 
-            Console.WriteLine("Be aware that, if you want this program to work, first add figures you want to add,\n" +
-                "and only then you can modify figures you already have!");
-
+            
 
 
             while (true)
@@ -38,16 +36,32 @@ namespace FigureApp
             {
                
                 case 1:
-                    {
-                            StreamReader reader = new StreamReader("figure.txt");
-                            string line = "";
-                            
-                            
-                                line += reader.ReadToEnd();
-                                reader.Close();
-                            
-                            Console.Write(line);
-                        break;
+                        {
+
+                            if(!File.Exists("figure.txt"))
+                                { File.Create("figure.txt");
+                                                             }
+                            using (StreamWriter strwrtr = new StreamWriter("figure.txt"))
+                            {
+                                if (ListOfFigures.Count == 0) Console.WriteLine("There are no figures, try to create one.");
+
+                                else 
+                                {
+                                    int i = 0;
+                                     foreach(var p in ListOfFigures)
+                                    {
+                                        strwrtr.WriteLine($"Figure[{i}]: {p.GetType().Name} has area of {p.Area} and perimeter of {p.Perimeter}.");
+                                    }
+                                }
+                            }
+
+                            using (StreamReader strrdr = new StreamReader("figure.txt"))
+                            {
+                                string info = strrdr.ReadToEnd();
+                                Console.Write(info);
+                            }
+
+                                break;
                     }
                 case 2:
                     {
@@ -75,7 +89,6 @@ namespace FigureApp
                                         circle.FindCenter();
                                         circle.FindArea();
                                         circle.FindPerimeter();
-                                        saver += $"The area of this circle is {circle.Area} and the perimeter is {circle.Perimeter} \n";
                                         flag = true;
                                         ListOfFigures.Add(circle);
                                         
@@ -97,7 +110,6 @@ namespace FigureApp
                                         rectangle.FindCenter();
                                         rectangle.FindArea();
                                         rectangle.FindPerimeter();
-                                        saver += $"The area of rectangle is: {rectangle.Area} and Perimeter of rectangle is: {rectangle.Perimeter}\n";
                                         flag = true;
                                         ListOfFigures.Add(rectangle);
                                         break;
@@ -114,7 +126,6 @@ namespace FigureApp
                                         triangle.FindCenter();
                                         triangle.FindArea();
                                         triangle.FindPerimeter();
-                                        saver += $"The area of triangle is: {triangle.Area} and Perimeter of triangle is: {triangle.Perimeter}\n"; 
                                         ListOfFigures.Add(triangle);
                                         flag = true;
                                         break;
@@ -127,7 +138,7 @@ namespace FigureApp
                     }
                 case 3:
                     {
-                            Console.WriteLine("Choose what you want to change: \n 1)Move the figure \n 2)Rotate the figure \n 3)Scale the figure \n 4) Delete the Figure");
+                            Console.WriteLine("Choose what you want to change: \n 1)Move the figure \n 2)Rotate the figure \n 3)Scale the figure \n");
                             int whatToDo = Convert.ToInt32(Console.ReadLine());
                             Console.WriteLine("Choose the index of element you want to change(begins from zero):");
                             int index = Convert.ToInt32(Console.ReadLine());
@@ -145,18 +156,7 @@ namespace FigureApp
                                     Console.WriteLine("Define how many times you want to scale your figure");
                                     ListOfFigures[index].Scale(Convert.ToInt32(Console.ReadLine()));
                                     break;
-                                case 4:
-                                    Console.WriteLine("I'm deleting this figure");
-                                    ListOfFigures.RemoveAt(index);
-                                    saver = "";
-                                    StreamWriter deleteAll = new StreamWriter("figure.txt",false);
-                                    deleteAll.Write("");
-                                    deleteAll.Close();
-                                    foreach(Figure p in ListOfFigures)
-                                    {
-                                        saver = $"The area of {p.GetType()} is {p.Area} and Perimeter of {p.GetType()} is {p.Perimeter}";
-                                    }
-                                    break;
+                               
                             }
 
 
@@ -165,9 +165,9 @@ namespace FigureApp
                 case 4:
                     {
                             TextWriter textWriter = new StreamWriter("saverr");
-                            Newtonsoft.Json.JsonSerializer serializer = new Newtonsoft.Json.JsonSerializer();
+                            JsonSerializer serializer = JsonSerializer.Create(new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Objects });
                             serializer.Serialize(textWriter, ListOfFigures);
-
+                            textWriter.Close();
 
                             break;
                     }
@@ -259,12 +259,10 @@ namespace FigureApp
 
                     case 5:
                         {
-                            TextReader textReader = new StreamReader("saverr");
-                            Newtonsoft.Json.JsonSerializer deserializer = new Newtonsoft.Json.JsonSerializer();
-                            deserializer.Deserialize(textReader);
-
-
-
+                            TextReader readToWrite = new StreamReader("saverr");
+                            JsonSerializer serializer = JsonSerializer.Create(new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+                            ListOfFigures = (List<Figure>)serializer.Deserialize(readToWrite, ListOfFigures.GetType());
+                            readToWrite.Close();
                             break;
                         }
                     default:
