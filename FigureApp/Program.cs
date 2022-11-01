@@ -51,6 +51,7 @@ namespace FigureApp
                                      foreach(var p in ListOfFigures)
                                     {
                                         strwrtr.WriteLine($"Figure[{i}]: {p.GetType().Name} has area of {p.Area} and perimeter of {p.Perimeter}.");
+                                        i++;
                                     }
                                 }
                             }
