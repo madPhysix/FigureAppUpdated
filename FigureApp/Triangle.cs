@@ -1,42 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FigureApp
 {
     [Serializable()]
-    internal class Triangle: Figure
+    internal class Triangle : FigureWithSides
     {
-        double sideAB, sideBC, sideCA;
-        
-
-        public Triangle(List<Point> points):base(points)
+        public Triangle(List<Point> points) : base(points)
         {
-
+            DefineSides();
+            FindPerimeter();
+            FindCenter();
+            FindArea();
         }
 
-        public void DefineSides(List<Point> points)
+        public void DefineSides()
         {
+            for (int i = 0; i < Points.Count; i++)
+            {
+                if (i == Points.Count - 1)
+                {
+                    CalculateAndAddSide(i, 0);
+                }
+                else
+                {
+                    CalculateAndAddSide(i, i + 1);
+                }
+            }
+        }
 
-            sideAB = Math.Sqrt((points[0].x - points[1].x) * (points[0].x - points[1].x) +
-               (points[0].y - points[1].y) * (points[0].y - points[1].y));
-
-            sideBC = Math.Sqrt((points[1].x - points[2].x) * (points[1].x - points[2].x) +
-               (points[1].y - points[2].y) * (points[1].y - points[2].y));
-
-            sideCA = Math.Sqrt((points[2].x - points[0].x) * (points[2].x - points[0].x) +
-               (points[2].y - points[0].y) * (points[2].y - points[0].y));
-
+        private void CalculateAndAddSide(int index1, int index2)
+        {
+            Sides.Add(Math.Sqrt((Points[index1].x - Points[index2].x) * (Points[index1].x - Points[index2].x) +
+                     (Points[index1].y - Points[index2].y) * (Points[index1].y - Points[index2].y)));
         }
 
         public override void FindArea()
         {
-            FindPerimeter();
             double peri = Perimeter / 2;
-            Area = Math.Sqrt(peri * (peri - sideAB) * (peri - sideBC) * (peri - sideCA));
+            Area = Math.Sqrt(peri * (peri - Sides[0]) * (peri - Sides[1]) * (peri - Sides[2]));
         }
 
         public override void FindCenter()
@@ -47,40 +49,7 @@ namespace FigureApp
                 sumX += p.x;
                 sumY += p.y;
             }
-            this.Center = new Point(sumX / 3, sumY / 3);
-            
+            Center = new Point(sumX / 3, sumY / 3);
         }
-
-        public override void FindPerimeter()
-        {
-            Perimeter = sideAB + sideBC + sideCA;
-        }
-
-        public override void MoveFigure(int moveByX, int moveByY)
-        {
-            foreach(Point point in Points)
-            {
-                point.x += moveByX;
-                point.y += moveByY;
-            }
-            Center.x += moveByX;
-            Center.y += moveByY;
-        }
-
-        public override void RotateFigure(double angle)
-        {
-            
-        }
-
-        public override void Scale(double multiplier)
-        {
-            foreach(var point in Points)
-            {
-                point.x =  Center.x - multiplier * (Center.x -point.x);
-                point.y = Center.y - multiplier * (Center.y - point.y);
-            }
-        }
-
-        
     }
 }
