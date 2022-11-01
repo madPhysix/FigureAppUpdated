@@ -10,7 +10,7 @@ namespace FigureApp
     internal class Circle : Figure
     {
        public double radius;
-       public string name = "circle";
+       
         
         
         public Circle(List<Point> points) : base(points)

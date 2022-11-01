@@ -16,17 +16,23 @@ namespace FigureApp
             List<Figure> ListOfFigures = new List<Figure>();
             string saver = "";
             int choice;
-            StreamWriter xwriter = new StreamWriter("pointsaver.txt", true);
+            
 
 
 
-
+            Console.WriteLine("Be aware that, if you want this program to work, first add figures you want to add,\n" +
+                "and only then you can modify figures you already have!");
 
 
 
             while (true)
             {
-                Console.WriteLine("\n1)show all figures\n2)create a figure\n3)change figure\n4)save to file\n5)read from file\n0)exit");
+                Console.WriteLine("\n1)show all figures\n" +
+                                  "2)create a figure\n" +
+                                  "3)change figure\n" +
+                                  "4)save to file\n" +
+                                  "5)read from file\n" +
+                                  "0)exit");
                 bool parsed = int.TryParse(Console.ReadLine(), out choice);
                 switch (choice)
             {
@@ -66,13 +72,6 @@ namespace FigureApp
                                         
                                         
                                         Circle circle = new Circle(pointsOfCircle);
-                                        
-                                        xwriter.Write("circle ");
-                                        foreach(var p in pointsOfCircle)
-                                        {
-                                            xwriter.Write($"{p.x} {p.y} ");
-                                        }
-                                        xwriter.WriteLine();
                                         circle.FindCenter();
                                         circle.FindArea();
                                         circle.FindPerimeter();
@@ -94,12 +93,7 @@ namespace FigureApp
                                       
                                         Rectangle rectangle = new Rectangle(pointsOfRectangle);
                                         
-                                        xwriter.Write("rectangle ");
-                                        foreach (var p in pointsOfRectangle)
-                                        {
-                                            xwriter.Write($"{p.x} {p.y} ");
-                                        }
-                                        xwriter.WriteLine();
+                                        
                                         rectangle.FindCenter();
                                         rectangle.FindArea();
                                         rectangle.FindPerimeter();
@@ -116,12 +110,6 @@ namespace FigureApp
                                         List<Point> pointsOfTriangle = new List<Point> { point21, point22, point23 };
                                        
                                         Triangle triangle = new Triangle(pointsOfTriangle);
-                                        xwriter.Write("triangle ");
-                                        foreach (var p in pointsOfTriangle)
-                                        {
-                                            xwriter.Write($"{p.x} {p.y} ");
-                                        }
-                                        xwriter.WriteLine();
                                         triangle.DefineSides(pointsOfTriangle);
                                         triangle.FindCenter();
                                         triangle.FindArea();
@@ -166,7 +154,7 @@ namespace FigureApp
                                     deleteAll.Close();
                                     foreach(Figure p in ListOfFigures)
                                     {
-                                        saver = $"The area of {p.name} is {p.Area} and Perimeter of {p} is {p.Perimeter}";
+                                        saver = $"The area of {p.GetType()} is {p.Area} and Perimeter of {p.GetType()} is {p.Perimeter}";
                                     }
                                     break;
                             }
@@ -176,78 +164,116 @@ namespace FigureApp
                     }
                 case 4:
                     {
-                            StreamWriter writer = new StreamWriter("figure.txt",true);
-                            writer.Write(saver);
-                            saver = "";
-                            writer.Close();
+                            TextWriter textWriter = new StreamWriter("saverr");
+                            Newtonsoft.Json.JsonSerializer serializer = new Newtonsoft.Json.JsonSerializer();
+                            serializer.Serialize(textWriter, ListOfFigures);
+
 
                             break;
                     }
+                    #region bst   
+                    /*  case 5:
+                    {
+                        xwriter.Close();
+                       StreamReader fileReader = new StreamReader("pointsaver.txt");
+                       string readed = "";
+
+                       while (readed != null)
+                       {
+                           readed = fileReader.ReadLine();
+
+                           if (readed != null)
+                           {
+                               var splitter = readed.Split(' ');
+                               switch (splitter[0])
+                               {
+                                   case "circle":
+                                       {
+                                           int i = 1;
+                                           List<Point> pointsOfCircle = new List<Point>();
+
+                                           while (i < splitter.Length - 1)
+                                           {
+                                               Point readedPoints = new Point(Convert.ToDouble(splitter[i]), Convert.ToDouble(splitter[i + 1]));
+                                               pointsOfCircle.Add(readedPoints);
+                                               i += 2;
+                                           }
+                                           Circle circle = new Circle(pointsOfCircle);
+                                           ListOfFigures.Add(circle);
+                                           circle.FindArea();
+                                           circle.FindCenter();
+                                           circle.FindPerimeter();
+                                           break;
+                                       }
+                                   case "rectangle":
+                                       {
+                                           int i = 1;
+                                           List<Point> pointsOfRectangle = new List<Point>();
+
+                                           while (i < splitter.Length - 1)
+                                           {
+                                               Point readedPoints = new Point(Convert.ToDouble(splitter[i]), Convert.ToDouble(splitter[i + 1]));
+                                               pointsOfRectangle.Add(readedPoints);
+                                               i += 2;
+                                           }
+                                           Rectangle rectangle = new Rectangle(pointsOfRectangle);
+                                           ListOfFigures.Add(rectangle);
+                                           rectangle.FindArea();
+                                           rectangle.FindCenter();
+                                           rectangle.FindPerimeter();
+                                           break;
+                                       }
+                                   case "triangle":
+                                       {
+                                           int i = 1;
+                                           List<Point> pointsOfTriangle = new List<Point>();
+
+                                           while (i < splitter.Length - 1)
+                                           {
+                                               Point readedPoints = new Point(Convert.ToDouble(splitter[i]), Convert.ToDouble(splitter[i + 1]));
+                                               pointsOfTriangle.Add(readedPoints);
+                                               i += 2;
+                                           }
+                                           Triangle triangle = new Triangle(pointsOfTriangle);
+                                           ListOfFigures.Add(triangle);
+                                           triangle.DefineSides(pointsOfTriangle);
+                                           triangle.FindArea();
+                                           triangle.FindCenter();
+                                           triangle.FindPerimeter();
+                                           break;
+                                       }
+
+                                       default:
+                                       {
+                                           Console.WriteLine("There are no figures :(");
+                                           break;
+                                       }
+                               }
+                           }
+                           }
+                       fileReader.Close();
+                       break;
+                   } */
+                    #endregion
+
+
                     case 5:
                         {
-                            xwriter.Close();
-                            StreamReader fileReader = new StreamReader("pointsaver.txt");
-                            string readed = "";
+                            TextReader textReader = new StreamReader("saverr");
+                            Newtonsoft.Json.JsonSerializer deserializer = new Newtonsoft.Json.JsonSerializer();
+                            deserializer.Deserialize(textReader);
 
-                            while (readed != null)
-                            {
-                                readed = fileReader.ReadLine();
-                               
-                                if (readed != null)
-                                {
-                                    var splitter = readed.Split(' ');
-                                    switch (splitter[0])
-                                    {
-                                        case "circle":
-                                            {
-                                                int i = 1;
-                                                List<Point> pointsOfCircle = new List<Point>();
 
-                                                while (i < splitter.Length - 1)
-                                                {
-                                                    Point readedPoints = new Point(Convert.ToDouble(splitter[i]), Convert.ToDouble(splitter[i + 1]));
-                                                    pointsOfCircle.Add(readedPoints);
-                                                    i += 2;
-                                                }
-                                                Circle circle = new Circle(pointsOfCircle);
-                                                ListOfFigures.Add(circle);
-                                                circle.FindArea();
-                                                circle.FindCenter();
-                                                circle.FindPerimeter();
-                                                break;
-                                            }
-                                        case "rectangle":
-                                            {
-                                                int i = 1;
-                                                List<Point> pointsOfRectangle = new List<Point>();
 
-                                                while (i < splitter.Length - 1)
-                                                {
-                                                    Point readedPoints = new Point(Convert.ToDouble(splitter[i]), Convert.ToDouble(splitter[i + 1]));
-                                                    pointsOfRectangle.Add(readedPoints);
-                                                    i += 2;
-                                                }
-                                                Rectangle rectangle = new Rectangle(pointsOfRectangle);
-                                                ListOfFigures.Add(rectangle);
-                                                rectangle.FindArea();
-                                                rectangle.FindCenter();
-                                                rectangle.FindPerimeter();
-                                                break;
-                                            }
-                                    }
-                                }
-                                }
-                            fileReader.Close();
                             break;
                         }
-                default:
+                    default:
                     {
                         if(parsed)
                         {
                             if(choice == 0)
                                 {
                                     Console.WriteLine("Ended!");
-                                    xwriter.Close();
                                     Environment.Exit(0);
                                     return;
                                 }

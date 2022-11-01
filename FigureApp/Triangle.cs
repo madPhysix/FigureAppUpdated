@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace FigureApp
 {
+    [Serializable()]
     internal class Triangle: Figure
     {
         double sideAB, sideBC, sideCA;
-        public string name = "triangle";
+        
 
         public Triangle(List<Point> points):base(points)
         {

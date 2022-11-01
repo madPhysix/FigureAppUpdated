@@ -8,11 +8,12 @@ using System.Xml.Serialization.Advanced;
 
 namespace FigureApp
 {
-    
+    [Serializable()]
     internal class Rectangle: Figure
     {
-        double sideA, sideB;
-        public string name = "rectangle";
+        public double sideA { get; private set; }
+        public double sideB { get; private set; } 
+        
         public Rectangle( List<Point> points): base(points)
         {
             

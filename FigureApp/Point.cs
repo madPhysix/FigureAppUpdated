@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace FigureApp
 {
+    [Serializable()]
     internal class Point 
     {
 
