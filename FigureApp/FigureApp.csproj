@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HelperClass.cs" />
     <Compile Include="FigureWithSides.cs" />
     <Compile Include="Triangle.cs" />
     <Compile Include="Point.cs" />
